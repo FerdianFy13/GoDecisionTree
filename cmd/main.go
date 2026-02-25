@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"godecisiontree/internal/domain/service"
-	infra "godecisiontree/internal/infrastructure/repository"
+	"GoDecisionTree/internal/domain/service"
+	infra "GoDecisionTree/internal/infrastructure/repository"
 )
 
 func main() {
