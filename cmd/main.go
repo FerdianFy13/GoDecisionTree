@@ -2,18 +2,24 @@ package main
 
 import (
 	"fmt"
+	"GoDecisionTree/internal/application/mapper"
 	"GoDecisionTree/internal/domain/service"
-	infra "GoDecisionTree/internal/infrastructure/repository"
+	"GoDecisionTree/internal/infrastructure/config"
+	"GoDecisionTree/internal/infrastructure/persistence"
 )
 
 func main() {
-	repo := infra.NewAlternativeMemoryRepository()
-	service := service.NewTopsisService(repo)
 
-	result, _ := service.Rank()
+	db, _ := config.NewDatabase()
 
-	fmt.Println("=== Ranking Tiket Terbaik ===")
-	for i, r := range result {
-		fmt.Printf("%d. %s (Score: %.4f)\n", i+1, r.Name, r.Score)
+	repo := persistence.NewMySQLRepository(db)
+	topsisService := service.NewTopsisService(repo)
+
+	result, _ := topsisService.Rank()
+
+	response := mapper.ToRankingResponse(result)
+
+	for i, r := range response {
+		fmt.Printf("%d. %s (%.4f)\n", i+1, r.Name, r.Score)
 	}
 }
